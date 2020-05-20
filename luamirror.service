@@ -1,0 +1,16 @@
+[Unit]
+Description=Lua Mirror Server
+After=network.target
+
+[Service]
+User=luamirror
+WorkingDirectory=/opt/luamirror/
+ExecStart=/opt/luamirror/luamirror \
+          --web.listen-address=:6666
+
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+ExecStartPre=/usr/bin/chown -R luamirror.luamirror /opt/luamirror
+
+[Install]
+WantedBy=multi-user.target
