@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/feranwq/lua-mirror/webrouter"
 	"github.com/go-chi/chi"
@@ -19,7 +18,7 @@ var (
 	version        = "0.0.1"
 	listenAddress  = kingpin.Flag("web.listen-address", "The address to listen on for web interface.").Default(":8080").String()
 	luarockServer  = kingpin.Flag("luarock.server", "Luarock server address").Default("http://luafr.org/luarocks").String()
-	requestTimeout = kingpin.Flag("notify.timeout", "Timeout for luarock server").Default("5s").Duration()
+	requestTimeout = kingpin.Flag("server.timeout", "Timeout for luarock server").Default("5s").Duration()
 	dataDir        = kingpin.Flag("data.dir", "Data directory").Default(".").String()
 )
 
@@ -45,11 +44,12 @@ func main() {
 	downloadQueue := make(map[string]int, 10)
 
 	luarockMirror := &webrouter.LuaMirror{
-		Logger:        logger,
-		Root:          dataDir,
-		Path:          "/",
-		LuarockServer: *luarockServer,
-		DownlowdQueue: downloadQueue,
+		Logger:         logger,
+		Root:           dataDir,
+		Path:           "/",
+		LuarockServer:  *luarockServer,
+		RequestTimeout: *requestTimeout,
+		DownlowdQueue:  downloadQueue,
 	}
 
 	r.Mount("/", luarockMirror.Routes())
@@ -61,4 +61,3 @@ func main() {
 	}
 
 }
-
