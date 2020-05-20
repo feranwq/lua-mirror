@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/feranwq/lua-mirror/webrouter"
 	"github.com/go-chi/chi"
@@ -61,4 +60,3 @@ func main() {
 	}
 
 }
-
